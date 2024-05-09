@@ -42,4 +42,7 @@ services:
 
 That's it, you can query your mocked API on port `3000`.
 
+### Running in the same `docker` network
+TDB
+
 PS: the best feature of that whole thing for me was the UI-way to design your API(s), save the result to json and them mock-deploy it using `mockoon`
