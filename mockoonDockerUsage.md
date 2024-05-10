@@ -40,9 +40,32 @@ services:
       - "3000:3000"
 ```
 
-That's it, you can query your mocked API on port `3000`.
+That's it, you can query your mocked API on `localhost:3000` (change the port in `command` and in `ports` according to your needs).
+
+IMPORTANT note: sometimes you can find that this `docker compose` does not really work. In that case check the access rights to `mockoon_config.json`.
+**Insecure** alternative:
+```
+version: '3.8'
+services:
+  mockoon:
+    image: mockoon/cli:8.1.1
+    user: root
+    command: --data data --port 3000
+    volumes:
+      - type: bind
+        source: ./ocr-service-v3-mock.json
+        target: /data
+        read_only: true
+    ports:
+      - "3000:3000"
+```
 
 ### Running in the same `docker` network
-TDB
+If you want to interconnect several services, you can put them into one `docker-compose.yml` file (so that the `docker` creates a new network on its own). Or you can create a new network yourself using `docker network create` and then attach the services to it.
+
+For example like this:
+```
+docker network create testnetwork
+```
 
 PS: the best feature of that whole thing for me was the UI-way to design your API(s), save the result to json and them mock-deploy it using `mockoon`
