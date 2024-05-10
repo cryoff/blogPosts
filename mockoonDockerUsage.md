@@ -68,4 +68,38 @@ For example like this:
 docker network create testnetwork
 ```
 
+We can list all the `docker` networks like this:
+```
+$ docker network ls
+
+NETWORK ID     NAME          DRIVER    SCOPE
+8a77a2ad75b8   bridge        bridge    local
+d19f6dd1841f   host          host      local
+85e9272c56cd   none          null      local
+bf781fb92d59   testnetwork   bridge    local
+```
+
+If we want `mockoon` to run in the same `docker` network as other containers:
+```
+version: '3.8'
+services:
+  mockoon:
+    image: mockoon/cli:8.1.1
+    user: root
+    command: --data data --port 8083
+    volumes:
+      - type: bind
+        source: ./ocr-service-v3-mock.json
+        target: /data
+        read_only: true
+    ports:
+      - "8083:8083"
+    networks:
+      - testnetwork
+
+networks:
+  testnetwork:
+    external: true
+```
+
 PS: the best feature of that whole thing for me was the UI-way to design your API(s), save the result to json and them mock-deploy it using `mockoon`
